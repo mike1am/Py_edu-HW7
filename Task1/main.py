@@ -16,8 +16,9 @@ while True:
             else: userPrint("Такой контакт уже существует.")
 
         case 2: # удаление контактов
-            contList = findContacts(userInput("Введите имя контакта (Enter для всех): "))
-            if bool(len(contList)):
+            indList = findContacts(userInput("Введите имя контакта (Enter для всех): "))
+            if bool(len(indList)):
+                contList = getContList(indList)
                 showContacts(contList)
                 if userBinChoice("Вы действительно хотите удалить эти контакты?"):
                     delContacts(contList)
@@ -27,8 +28,9 @@ while True:
             userPrint("==ed==")
 
         case 4: # просмотр контактов
-            contList = findContacts(userInput("Введите имя контакта (Enter для всех): "))
-            if bool(len(contList)):
+            indList = findContacts(userInput("Введите имя контакта (Enter для всех): "))
+            if bool(len(indList)):
+                contList = getContList(indList)
                 showContacts(contList)
             else: userPrint("Контакты не найдены.")
 
@@ -46,9 +48,10 @@ while True:
             fileName = userInput("Введите имя файла для импорта: ")
             impList = readFile(fileName)
             if len(impList) > 0:
-                formatId = fileName[-4:]
+                formatId = fileName[-3:]
                 if formatId in [el[0] for el in IMP_FUNCS.items()]:
-                    IMP_FUNCS[formatId](impList)
+                    if bool(IMP_FUNCS[formatId](impList)):
+                        userPrint("Некорректный формат импорта. Не все данные были загружены.")
                 else: userPrint("Неизвестный формат импорта.")
             else: userPrint("Не удалось загрузить данные из файла.")
 

@@ -14,8 +14,10 @@ def txtExp (cList):
 
 
 def csvExp (cList):
-    # ...
-    return []
+    expList = []
+    for cInd in cList:
+        expList.append(phonebookData[cInd]["name"] + ";" + phonebookData[cInd]["phone"])
+    return expList
 
 
 def jsonExp (cList):
@@ -25,18 +27,36 @@ def jsonExp (cList):
 
 # Импорт из списка строк в текстовом формате: имена и тел. на отдельных строках, между контактами пустая строка
 def txtImp (sList):
-    # ...
-    return
+    while len(sList) >= 3:
+        if sList[0] != "":
+            if not isPhone(sList[1]):
+                return -1
+            if len(cList := findContacts(sList[0], strong=True)) > 0:
+                phonebookData[cList[0]]["name"] = sList[0]
+                phonebookData[cList[0]]["phone"] = sList[1]
+            else:
+                phonebookData.append({"name": sList[0], "phone": sList[1]})
+        sList = sList[3:]
+    return 0
 
 
 def csvImp (sList):
-    # ...
-    return
+    for contStr in sList:
+        if contStr != "":
+            contact = contStr.split(";")
+            if len(contact) <= 1 or not isPhone(contact[1]):
+                return -1
+            if len(cList := findContacts(contact[0], strong=True)) > 0:
+                phonebookData[cList[0]]["name"] = contact[0]
+                phonebookData[cList[0]]["phone"] = contact[1]
+            else:
+                phonebookData.append({"name": contact[0], "phone": contact[1]})
+    return 0
 
 
 def jsonImp (sList):
     # ...
-    return
+    return 0
 
 
 EXP_FUNCS = {
@@ -67,6 +87,10 @@ def findContacts (nameStr, strong=False):
             resList.append(ind)
 
     return resList
+
+
+def getContList (indList):
+    return [phonebookData[ind] for ind in indList]
 
 
 def addContact (cName, cPhone):

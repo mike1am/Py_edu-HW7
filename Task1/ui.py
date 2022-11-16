@@ -1,6 +1,3 @@
-from model import phonebookData
-
-
 # chkFunc - функция, осуществляющая проверку ввода, если возвращает False - ввод некорректен
 # возвращает введённую строку
 def userInput (prompt, chkFunc=lambda _: True):
@@ -16,6 +13,10 @@ def userInput (prompt, chkFunc=lambda _: True):
 
 def userPrint (outStr):
     print(outStr)
+
+
+def errorMsg (msg):
+    print(f"!!! {msg}")
 
 
 def menu ():
@@ -37,8 +38,8 @@ def menu ():
 
 
 def showContacts (contList):
-    for contInd in contList:
-        print(f"\nИмя: {phonebookData[contInd]['name']}\nТелефон: {phonebookData[contInd]['phone']}")
+    for contact in contList:
+        userPrint(f"\nИмя: {contact['name']}\nТелефон: {contact['phone']}")
 
 
 def userBinChoice (prompt):
@@ -48,11 +49,11 @@ def userBinChoice (prompt):
 
 def writeFile (expList, fName):
     try:
-        with open(fName, "a") as file:
+        with open(fName, "w") as file:
             for fileStr in expList:
                 file.write(fileStr + "\n")
     except IOError:
-        print("Ошибка записи в файл.")
+        errorMsg("Ошибка записи в файл.")
 
 
 def readFile (fName):
@@ -60,16 +61,16 @@ def readFile (fName):
     try:
         with open(fName, "r") as file:
             for fileStr in file:
-                readList.append(fileStr)
+                readList.append(fileStr.rstrip("\n"))
     except IOError:
-        print("Ошибка чтения из файла.")
+        errorMsg("Ошибка чтения из файла.")
     finally:
         return readList
 
 
 FORMATS = {
     "txt": "Текстовый (одно значение на строке)",
-    "cvs": "Значения, разделённые запятыми",
+    "csv": "Значения, разделённые запятыми",
     "json": "JavaScript Object Notation",
 }
 
