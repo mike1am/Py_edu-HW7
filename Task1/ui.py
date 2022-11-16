@@ -1,3 +1,6 @@
+from model import phonebookData
+
+
 # chkFunc - функция, осуществляющая проверку ввода, если возвращает False - ввод некорректен
 # возвращает введённую строку
 def userInput (prompt, chkFunc=lambda _: True):
@@ -32,9 +35,10 @@ def menu ():
 
     return int(userInput("Введите требуемое действие: ", lambda uImp: 0 <= int(uImp) <= len(MENU_ITEMS)))
 
+
 def showContacts (contList):
-    for contact in contList:
-        print(f"\nИмя: {contact[1]['name']}\nТелефон: {contact[1]['phone']}")
+    for contInd in contList:
+        print(f"\nИмя: {phonebookData[contInd]['name']}\nТелефон: {phonebookData[contInd]['phone']}")
 
 
 def userBinChoice (prompt):

@@ -2,12 +2,12 @@
 phonebookData = []
 
 # Формирование списка строк для экспорта в текстовом формате
-# cList - см. коммент. к findContacts
+# cList - список индексов в phonebookData
 def txtExp (cList):
     expList = []
-    for contact in cList:
-        expList.append(contact[1]["name"])
-        expList.append(contact[1]["phone"])
+    for cInd in cList:
+        expList.append(phonebookData[cInd]["name"])
+        expList.append(phonebookData[cInd]["phone"])
         expList.append("")
     
     return expList
@@ -58,14 +58,13 @@ def isPhone(phoneStr):
     return not bool(len(list(filter(lambda ch: ch not in "+() 0123456789", phoneStr))))
 
 
-# Формирует список контактов, состоящий из картежей индексов в phonebookData и словарей из phonebookData,
-# на основе строки, в которой должно содержаться имя или часть имени контакта
+# Формирует список индексов контактов в phonebookData, на основе строки, в которой должно содержаться имя или часть имени контакта
 # strong - булевый флаг, True - ищет только полное соответствие в именах, False - вхождение
 def findContacts (nameStr, strong=False):
     resList = []
     for ind, contact in enumerate(phonebookData):
         if not strong and nameStr in contact["name"] or strong and nameStr == contact["name"]:
-            resList.append((ind, contact))
+            resList.append(ind)
 
     return resList
 
@@ -78,4 +77,4 @@ def addContact (cName, cPhone):
 def delContacts (cList):
     global phonebookData
     for i in range(len(cList)):
-        phonebookData.pop(cList[i][0] - i)
+        phonebookData.pop(cList[i] - i)
