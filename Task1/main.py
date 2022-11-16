@@ -35,12 +35,12 @@ while True:
             else: userPrint("Контакты не найдены.")
 
         case 5: # экспорт контактов
-            formatId = inputFormat()
-            contList = findContacts(userInput("Введите имя контакта (Enter для всех): "))
-            if bool(len(contList)):
+            indList = findContacts(userInput("Введите имя контакта (Enter для всех): "))
+            if bool(len(indList)):
+                formatId = inputFormat()
                 fileName = userInput("Введите имя файла для экспорта: ")
                 if fileName[-4:] != "." + formatId: fileName += "." + formatId
-                expList = EXP_FUNCS[formatId](contList)
+                expList = EXP_FUNCS[formatId](indList)
                 writeFile(expList, fileName)
             else: userPrint("Нет контактов для экспорта.")
 
@@ -48,7 +48,7 @@ while True:
             fileName = userInput("Введите имя файла для импорта: ")
             impList = readFile(fileName)
             if len(impList) > 0:
-                formatId = fileName[-3:]
+                formatId = fileName[fileName.rfind(".") + 1:]
                 if formatId in [el[0] for el in IMP_FUNCS.items()]:
                     if bool(IMP_FUNCS[formatId](impList)):
                         userPrint("Некорректный формат импорта. Не все данные были загружены.")

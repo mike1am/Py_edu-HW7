@@ -1,3 +1,5 @@
+import json
+
 # Список словарей контактов. Каждый словарь содержит ключи, соответствующие полям контакта (name и phone) и соотв. значения
 phonebookData = []
 
@@ -21,8 +23,7 @@ def csvExp (cList):
 
 
 def jsonExp (cList):
-    # ...
-    return []
+    return [json.dumps(getContList(cList), indent=4)]
 
 
 # Импорт из списка строк в текстовом формате: имена и тел. на отдельных строках, между контактами пустая строка
@@ -55,7 +56,15 @@ def csvImp (sList):
 
 
 def jsonImp (sList):
-    # ...
+    contStr = "".join(sList)
+    contList = json.loads(contStr)
+    for contact in contList:
+        if not isPhone(contact["phone"]):
+                return -1
+        if len(cList := findContacts(contact["name"], strong=True)) > 0:
+            phonebookData[cList[0]] = contact
+        else:
+            phonebookData.append(contact)
     return 0
 
 
