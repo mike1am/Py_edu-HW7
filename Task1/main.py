@@ -15,7 +15,7 @@ def inputContact (contInd):
     for fieldKey, fieldDesc in FIELDS.items():
         promptExt = ": " if contact[fieldKey] == "" else ". Enter - оставить без изменения: "
         newVal = userInput(f"Введите {fieldDesc} контакта{promptExt}", \
-                lambda uInp: uInp != "" or contact[fieldKey] != "") # если поле было пустое (новый контакт), то пустой ввод недопустим
+                lambda uInp: (uInp != "" or contact[fieldKey] != "") and (fieldKey != "phone" or isPhone(uInp))) # если поле было пустое (новый контакт), то пустой ввод недопустим, также проверка, если тел. то корректный формат
         if newVal != "" and newVal != contact[fieldKey]: # если введено непустое значение (т.е. требуется изменение) и оно не равно прежнему
             if fieldKey == "name" and len(findContacts(newVal)) > 0: # если это поле имени (ключевое) и оно уже занято др. контактом
                 userPrint("Такой контакт уже существует.")
@@ -25,7 +25,7 @@ def inputContact (contInd):
     sortContacts()
     return
 
-
+# Загрузка контактов при запуске программы
 impList = readFile("phonebook.bd")
 if len(impList) > 0:
     csvImp(impList)
@@ -35,7 +35,7 @@ while True:
     
     match operNum:
         case 0: 
-            writeFile(csvExp(findContacts("")), "phonebook.bd")
+            writeFile(csvExp(findContacts("")), "phonebook.bd") # выгрузка контактов при выходе из программы
             break
         
         case 1: # добавление контакта
@@ -69,7 +69,7 @@ while True:
             if bool(len(indList)):
                 formatId = inputFormat()
                 fileName = userInput("Введите имя файла для экспорта: ")
-                if fileName[-4:] != "." + formatId: fileName += "." + formatId
+                if fileName[fileName.rfind(".")] != "." + formatId: fileName += "." + formatId # если не задано расширение, оно автоматически добавляется
                 expList = EXP_FUNCS[formatId](indList)
                 writeFile(expList, fileName)
             else: userPrint("Нет контактов для экспорта.")
@@ -78,7 +78,7 @@ while True:
             fileName = userInput("Введите имя файла для импорта: ")
             impList = readFile(fileName)
             if len(impList) > 0:
-                formatId = fileName[fileName.rfind(".") + 1:]
+                formatId = fileName[fileName.rfind(".") + 1:] # определение формата по расширению файла
                 if formatId in [el[0] for el in IMP_FUNCS.items()]:
                     if bool(IMP_FUNCS[formatId](impList)):
                         userPrint("Некорректный формат импорта. Не все данные были загружены.")

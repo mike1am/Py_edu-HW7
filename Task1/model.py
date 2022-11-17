@@ -4,29 +4,29 @@ import json
 phonebookData = []
 
 # Формирование списка строк для экспорта в текстовом формате
-# cList - список индексов в phonebookData
-def txtExp (cList):
+# indList - список индексов в phonebookData
+def txtExp (indList):
     expList = []
-    for cInd in cList:
+    for cInd in indList:
         expList.append(phonebookData[cInd]["name"])
         expList.append(phonebookData[cInd]["phone"])
         expList.append("")
-    
     return expList
 
 
-def csvExp (cList):
+def csvExp (indList):
     expList = []
-    for cInd in cList:
+    for cInd in indList:
         expList.append(phonebookData[cInd]["name"] + ";" + phonebookData[cInd]["phone"])
     return expList
 
 
-def jsonExp (cList):
-    return [json.dumps(getContList(cList), indent=4)]
+def jsonExp (indList):
+    return [json.dumps(getContList(indList), indent=4)]
 
 
 # Импорт из списка строк в текстовом формате: имена и тел. на отдельных строках, между контактами пустая строка
+# Функции импорта перезаписывают сущствующие контакты с такими же именами
 def txtImp (sList):
     while len(sList) >= 3:
         if sList[0] != "":
@@ -98,19 +98,21 @@ def findContacts (nameStr, strong=False):
     return resList
 
 
+# Возвращает список контактов по списку индексов из phonebookData
 def getContList (indList):
     return [phonebookData[ind] for ind in indList]
 
 
+# Добавляет пустой контакт перед заполнением нового контакта
 def addContact ():
     global phonebookData
     phonebookData.append({"name": "", "phone": ""})
 
 
-def delContacts (cList):
+def delContacts (indList):
     global phonebookData
-    for i in range(len(cList)):
-        phonebookData.pop(cList[i] - i)
+    for i in range(len(indList)):
+        phonebookData.pop(indList[i] - i)
 
 
 def sortContacts ():
