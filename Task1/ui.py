@@ -74,6 +74,7 @@ FORMATS = {
     "json": "JavaScript Object Notation",
 }
 
+
 def inputFormat ():
     print()
     for id, desc in FORMATS.items(): 

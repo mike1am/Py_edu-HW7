@@ -102,12 +102,16 @@ def getContList (indList):
     return [phonebookData[ind] for ind in indList]
 
 
-def addContact (cName, cPhone):
+def addContact ():
     global phonebookData
-    phonebookData.append({"name": cName, "phone": cPhone})
+    phonebookData.append({"name": "", "phone": ""})
 
 
 def delContacts (cList):
     global phonebookData
     for i in range(len(cList)):
         phonebookData.pop(cList[i] - i)
+
+
+def sortContacts ():
+    phonebookData.sort(key=lambda contact: contact["name"])
